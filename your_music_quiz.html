@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Music Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1, h2 {
+            color: #555;
+        }
+        .question {
+            margin: 20px 0;
+        }
+        .result {
+            margin-top: 30px;
+            font-size: 1.2em;
+            color: #007BFF;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Music Quiz</h1>
+    <p>Answer the questions below to find out your music identity!</p>
+    
+    <div id="quiz">
+        <!-- Questions will be dynamically inserted here -->
+    </div>
+
+    <button id="submit">Submit Quiz</button>
+    <div id="result" class="result"></div>
+
+    <script>
+        const questions = [
+            {
+                question: "Growing up, your music taste was...",
+                options: [
+                    "Main character energy (aka whatever was on Radio Disney)",
+                    "Three phases ahead of your emo era",
+                    ""You've probably never heard of them"",
+                    "Stealing your parents' vinyl and gatekeeping",
+                    "Found it in the YouTube rabbit hole at 3am"
+                ],
+                scores: [1, 2, 3, 4, 5]
+            },
+            {
+                question: "The song that made you different™️ was...",
+                options: [
+                    "That one everyone claims changed their life",
+                    "Something you're still too embarrassed to admit",
+                    "A song you pretended to understand",
+                    "The one that played when you peaked in high school",
+                    "Your villain origin story soundtrack"
+                ],
+                scores: [4, 2, 1, 5, 3]
+            },
+            // Add more questions here
+        ];
+
+        function renderQuiz() {
+            const quizDiv = document.getElementById("quiz");
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement("div");
+                questionDiv.classList.add("question");
+                questionDiv.innerHTML = `
+                    <h2>Question ${index + 1}</h2>
+                    <p>${q.question}</p>
+                    ${q.options.map((opt, i) => `
+                        <label>
+                            <input type="radio" name="q${index}" value="${q.scores[i]}" />
+                            ${opt}
+                        </label><br />
+                    `).join("")}
+                `;
+                quizDiv.appendChild(questionDiv);
+            });
+        }
+
+        function calculateResult() {
+            let totalScore = 0;
+            questions.forEach((_, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected) {
+                    totalScore += parseInt(selected.value);
+                }
+            });
+
+            const resultDiv = document.getElementById("result");
+            if (totalScore <= 15) {
+                resultDiv.textContent = "You are THE MOMENT MAKER!";
+            } else if (totalScore <= 30) {
+                resultDiv.textContent = "You are THE DEEP FEELER!";
+            } else if (totalScore <= 45) {
+                resultDiv.textContent = "You are THE EXPLORER!";
+            } else if (totalScore <= 60) {
+                resultDiv.textContent = "You are THE TIME KEEPER!";
+            } else {
+                resultDiv.textContent = "You are THE MEDIUM!";
+            }
+        }
+
+        document.getElementById("submit").addEventListener("click", calculateResult);
+
+        // Render the quiz on page load
+        renderQuiz();
+    </script>
+</body>
+</html>
